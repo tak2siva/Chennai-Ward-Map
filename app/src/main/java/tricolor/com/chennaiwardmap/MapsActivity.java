@@ -1,25 +1,37 @@
 package tricolor.com.chennaiwardmap;
 
-import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.maps.android.data.kml.KmlLayer;
+import com.google.maps.android.data.kml.KmlPlacemark;
 
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
+import tricolor.com.chennaiwardmap.dao.WardInfoDao;
 import tricolor.com.chennaiwardmap.db.DatabaseHandle;
+import tricolor.com.chennaiwardmap.model.WardInfo;
+import tricolor.com.chennaiwardmap.util.KmlUtil;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
+    private static final int defaultZoom = 13;
+    private static final LatLng chennai = new LatLng(13.082680, 80.270718);
+    private List<Marker> markers = new ArrayList<>();
+    private KmlLayer kmlLayer;
+    private WardInfoDao wardInfoDao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,9 +41,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
-        DatabaseHandle handle = new DatabaseHandle(getApplicationContext());
-        handle.getAllWardInfo();
+        this.wardInfoDao = new WardInfoDao(DatabaseHandle.getInstance(getApplicationContext()));
     }
 
 
@@ -47,20 +57,45 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
-        // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(13.082680, 80.270718);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Chennai"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 15));
-        mMap.getUiSettings().setZoomControlsEnabled(true);
+        setDefaultConfig();
 
         try {
-            KmlLayer kmlLayer = new KmlLayer(mMap, R.raw.geo_chennai_wards, this);
+            kmlLayer = new KmlLayer(mMap, R.raw.geo_chennai_wards, this);
             kmlLayer.addLayerToMap();
         } catch (XmlPullParserException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
+            @Override
+            public void onMapLongClick(LatLng latLng) {
+                removeAllMarkers();
+                KmlPlacemark kmlPlacemark = KmlUtil.containsInAnyPolygon(kmlLayer, latLng);
+                String zone_no = kmlPlacemark.getProperty("ZONE_NO");
+                WardInfo wardInfo = wardInfoDao.getWardInfo(zone_no);
+
+                Marker clickLocationMarker = mMap.addMarker(new MarkerOptions().position(latLng).title(wardInfo.getTitle()));
+                markers.add(clickLocationMarker);
+            }
+        });
+    }
+
+    private void setDefaultConfig() {
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(chennai, defaultZoom));
+        mMap.getUiSettings().setZoomControlsEnabled(true);
+        mMap.getUiSettings().setMapToolbarEnabled(true);
+        mMap.getUiSettings().setMyLocationButtonEnabled(true);
+
+        final Marker chennaiMarker = mMap.addMarker(new MarkerOptions().position(chennai).title("Marker in Chennai"));
+        markers.add(chennaiMarker);
+    }
+
+    public void removeAllMarkers() {
+        for (Marker m : markers) {
+            m.remove();
+        }
+        markers.clear();
     }
 }

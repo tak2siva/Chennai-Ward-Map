@@ -8,14 +8,15 @@ import android.database.sqlite.SQLiteOpenHelper;
 import java.util.ArrayList;
 import java.util.List;
 
-import tricolor.com.chennaiwardmap.WardInfo;
+import tricolor.com.chennaiwardmap.model.WardInfo;
 
 
 public class DatabaseHandle {
     private SQLiteOpenHelper sqLiteOpenHelper;
     private SQLiteDatabase database;
+    private static DatabaseHandle instance;
 
-    public DatabaseHandle(Context context) {
+    private DatabaseHandle(Context context) {
         this.sqLiteOpenHelper = new DatabaseConfig(context);
     }
 
@@ -27,6 +28,13 @@ public class DatabaseHandle {
         if (this.database != null) {
             database.close();
         }
+    }
+
+    public static DatabaseHandle getInstance(Context context) {
+        if (instance == null) {
+            instance = new DatabaseHandle(context);
+        }
+        return instance;
     }
 
     public void getAllWardInfo() {
@@ -44,5 +52,18 @@ public class DatabaseHandle {
 
         cursor.close();
         close();
+    }
+
+    public void getWard(int id) {
+        Cursor cursor = database.query("ward_info", new String[]{"Zone No", "Zone Name"}, "Zone No" + "=?",
+                new String[]{String.valueOf(id)}, null, null, null, null);
+
+        if (cursor != null) {
+            cursor.moveToFirst();
+        }
+    }
+
+    public SQLiteDatabase getDatabase() {
+        return database;
     }
 }
