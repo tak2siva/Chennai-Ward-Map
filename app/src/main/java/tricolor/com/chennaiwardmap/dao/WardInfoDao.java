@@ -1,7 +1,6 @@
 package tricolor.com.chennaiwardmap.dao;
 
 import android.database.Cursor;
-import android.support.annotation.Nullable;
 
 import tricolor.com.chennaiwardmap.db.DatabaseHandle;
 import tricolor.com.chennaiwardmap.model.WardInfo;
@@ -26,7 +25,7 @@ public class WardInfoDao {
 
             if (cursor != null) {
                 cursor.moveToFirst();
-                wardInfo = new WardInfo(cursor.getInt(0), cursor.getString(1), cursor.getString(2));
+                wardInfo = new WardInfo(cursor);
             }
         } catch (Exception e) {
             System.out.println("Error fetching ward info");

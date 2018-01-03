@@ -14,17 +14,40 @@
         android:layout_alignParentRight="true"
         tools:context="tricolor.com.chennaiwardmap.MapsActivity" />
 
-    <EditText
-        android:id="@+id/editText2"
+    <!--<EditText-->
+        <!--android:id="@+id/editText2"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:layout_below="@+id/map"-->
+        <!--android:layout_centerHorizontal="true"-->
+        <!--android:layout_marginTop="60dp"-->
+        <!--android:layout_weight="1"-->
+        <!--android:ems="10"-->
+        <!--android:inputType="textPersonName"-->
+        <!--android:text="Hello" />-->
+
+    <!--<TextView-->
+        <!--android:id="@+id/textView"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:layout_centerHorizontal="true"-->
+        <!--android:layout_marginTop="60dp"-->
+        <!--android:layout_weight="1"-->
+        <!--android:text="TextView" />-->
+
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/map"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="60dp"
-        android:layout_weight="1"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:text="Hello" />
+        android:layout_weight="1">
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="" />
+
+    </ScrollView>
 
 
 </LinearLayout>

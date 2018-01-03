@@ -46,7 +46,7 @@ public class DatabaseHandle {
         cursor.moveToFirst();
 
         while (!cursor.isAfterLast()) {
-            list.add(new WardInfo(cursor.getInt(0), cursor.getString(1), cursor.getString(2)));
+//            list.add(new WardInfo(cursor.getInt(0), cursor.getString(1), cursor.getString(2), zonalOfficeMobile));
             cursor.moveToNext();
         }
 

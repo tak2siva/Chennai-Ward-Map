@@ -28,6 +28,7 @@ public class KmlUtil {
             }
         }
 
-        return new KmlPlacemark(null, null, null, new HashMap<String, String>());
+//        return new KmlPlacemark(null, null, null, new HashMap<String, String>());
+        return null;
     }
 }
