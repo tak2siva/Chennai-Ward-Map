@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="tricolor.com.chennaiwardmap.ResultViewActivity">
+
+    <fragment
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="0dp"
+        android:layout_height="100dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/scrollView4"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ScrollView
+        android:id="@+id/scrollView4"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:paddingBottom="25dp"
+        app:layout_constraintBottom_toTopOf="@+id/imageView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/map">
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/lblWard"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:text="WARD: "
+                android:textSize="24sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/lblZonalOfficerMobile" />
+
+            <TextView
+                android:id="@+id/txtWardName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:layout_marginStart="8dp"
+                android:text="THIRUVANMIYUR"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                app:layout_constraintBaseline_toBaselineOf="@+id/lblWard"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/lblWard" />
+
+            <TextView
+                android:id="@+id/txtZoneName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="16dp"
+                android:text="ADYAR"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/lblZone"
+                app:layout_constraintTop_toBottomOf="@+id/map" />
+
+            <TextView
+                android:id="@+id/lblZone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:text="ZONE:"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/map" />
+
+            <android.support.constraint.Guideline
+                android:id="@+id/guideline2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_begin="20dp" />
+
+            <TextView
+                android:id="@+id/txtZoneNum"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginTop="16dp"
+                android:autoSizeMinTextSize="18dp"
+                android:background="@android:color/holo_purple"
+                android:padding="5dp"
+                android:text="8"
+                android:textAlignment="center"
+                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                android:textColor="@android:color/white"
+                android:textSize="30sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/txtZoneName" />
+
+            <TextView
+                android:id="@+id/txtWardNum"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginTop="16dp"
+                android:autoSizeMinTextSize="18dp"
+                android:background="@android:color/holo_purple"
+                android:padding="5dp"
+                android:text="182"
+                android:textAlignment="center"
+                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                android:textColor="@android:color/white"
+                android:textSize="30sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/txtWardName" />
+
+            <TextView
+                android:id="@+id/lblZonalOfficeAddress"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:text="ZONAL OFFICE ADDRESS"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toStartOf="@+id/txtZoneNum"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/txtZoneName" />
+
+            <TextView
+                android:id="@+id/lblWardOfficeAddress"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:text="WARD OFFICE ADDRESS"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toStartOf="@+id/txtWardNum"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/lblWard" />
+
+            <TextView
+                android:id="@+id/txtZonalOfficeAddress"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:lineSpacingExtra="10sp"
+                android:text="NO 9 KAMARAJAR NAGAR SOUTH AVENUE, THIRUVANMIYUR, CHENNAI 600041. BEHIND BUS DEPO."
+                android:textSize="16sp"
+                app:layout_constraintEnd_toStartOf="@+id/txtZoneNum"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/lblZonalOfficeAddress" />
+
+            <TextView
+                android:id="@+id/txtWardOfficeAddress"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:lineSpacingExtra="10sp"
+                android:text="NO 9 KAMARAJAR NAGAR SOUTH AVENUE, THIRUVANMIYUR, CHENNAI 600041. BEHIND BUS DEPO."
+                android:textSize="16sp"
+                app:layout_constraintEnd_toStartOf="@+id/txtWardNum"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/lblWardOfficeAddress" />
+
+            <TextView
+                android:id="@+id/lblZonalOfficeLandline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:text="OFFICE LANDLINE: "
+                android:textSize="18sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/txtZonalOfficeAddress" />
+
+            <TextView
+                android:id="@+id/txtZonalOfficeLandline"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="24425961 / 24425963"
+                android:textSize="18sp"
+                app:layout_constraintBaseline_toBaselineOf="@+id/lblZonalOfficeLandline"
+                app:layout_constraintStart_toEndOf="@+id/lblZonalOfficeLandline" />
+
+            <TextView
+                android:id="@+id/lblZonalOfficerMobile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:text="OFFICER MOBILE: "
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/lblZonalOfficeLandline" />
+
+            <TextView
+                android:id="@+id/lblWardContact"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:text="CONTACT: "
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/txtWardOfficeAddress" />
+
+            <TextView
+                android:id="@+id/txtZonalOfficerMobile"
+                android:layout_width="103dp"
+                android:layout_height="20dp"
+                android:layout_marginStart="16dp"
+                android:text="9445490023"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintBaseline_toBaselineOf="@+id/lblZonalOfficerMobile"
+                app:layout_constraintStart_toEndOf="@+id/lblZonalOfficerMobile" />
+
+            <TextView
+                android:id="@+id/txtWardContact"
+                android:layout_width="270dp"
+                android:layout_height="17dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:padding="8dp"
+                android:text="9445490023"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toEndOf="@+id/lblWardContact"
+                app:layout_constraintTop_toBottomOf="@+id/txtWardOfficeAddress" />
+
+        </android.support.constraint.ConstraintLayout>
+    </ScrollView>
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="360dp"
+        android:layout_height="59dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@mipmap/join_whatsapp" />
+</android.support.constraint.ConstraintLayout>

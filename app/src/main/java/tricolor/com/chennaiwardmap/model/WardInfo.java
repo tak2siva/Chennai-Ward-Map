@@ -1,8 +1,14 @@
 package tricolor.com.chennaiwardmap.model;
 
 import android.database.Cursor;
+import android.os.Parcel;
+import android.os.Parcelable;
 
-public class WardInfo {
+import java.io.Serializable;
+
+public class WardInfo implements Serializable, Parcelable {
+    private static final long SERIAL_KEY = 91514674;
+
     public static final String TABLE_NAME = "ward_info";
     public static final String COLUMN_WARD_NO = "ward_no";
     public static final String COLUMN_ZONE_NO = "zone_no";
@@ -65,6 +71,8 @@ public class WardInfo {
         this.zonalOfficeMobile = zonalOfficeMobile;
     }
 
+    public String getWardNo() { return "" + wardNo; }
+
     public String getZoneNo() {
         return zoneNo;
     }
@@ -84,4 +92,43 @@ public class WardInfo {
     public String getZonalOfficeLandline() {
         return zonalOfficeLandline;
     }
+
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.wardNo);
+        dest.writeString(this.zoneNo);
+        dest.writeString(this.zoneName);
+        dest.writeString(this.zonalOfficeAddress);
+        dest.writeString(this.zonalOfficeEmail);
+        dest.writeString(this.zonalOfficeLandline);
+        dest.writeString(this.zonalOfficeMobile);
+    }
+
+    protected WardInfo(Parcel in) {
+        this.wardNo = in.readInt();
+        this.zoneNo = in.readString();
+        this.zoneName = in.readString();
+        this.zonalOfficeAddress = in.readString();
+        this.zonalOfficeEmail = in.readString();
+        this.zonalOfficeLandline = in.readString();
+        this.zonalOfficeMobile = in.readString();
+    }
+
+    public static final Parcelable.Creator<WardInfo> CREATOR = new Parcelable.Creator<WardInfo>() {
+        @Override
+        public WardInfo createFromParcel(Parcel source) {
+            return new WardInfo(source);
+        }
+
+        @Override
+        public WardInfo[] newArray(int size) {
+            return new WardInfo[size];
+        }
+    };
 }

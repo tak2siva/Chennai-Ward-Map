@@ -1,4 +1,13 @@
 <resources>
     <string name="app_name">Chennai Ward Map</string>
     <string name="title_activity_maps">Map</string>
+    <string name="splash_screen">Chennai Ward Map</string>
+    <string name="splash_screen_text">What Your Ward, A Chennai Tricolor Initiative</string>
+    <string name="img_getting_location_desc">Progress Screen for Getting your location</string>
+    <string name="strMapPickerTitle">WHAT YOUR WARD?</string>
+    <string name="strConfirmLocation">CONFIRM YOUR LOCATION. ADJUST IF REQUIRED.</string>
+    <string name="strNextButton">NEXT</string>
+    <string name="title_activity_result_view">ResultView</string>
+    <string name="str_map_picker_title">WHAT UR WARD?</string>
+    <string name="strMapSelectTitle">WHAT UR WARD?</string>
 </resources>
