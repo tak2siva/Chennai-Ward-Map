@@ -8,6 +8,7 @@ import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
@@ -98,7 +99,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         PackageManager.PERMISSION_GRANTED) {
             Location mLocation = manager.getLastKnownLocation(bestProvider);
 
-
             LatLng currentLatLng = new LatLng(mLocation.getLatitude(),
                     mLocation.getLongitude());
             CameraUpdate update = CameraUpdateFactory.newLatLngZoom(currentLatLng,
@@ -154,5 +154,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         intent.putExtras(bundle);
         startActivity(intent);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if(requestCode == 1) {
+            if (grantResults.length > 0
+                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                moveAndCreateMarkerInCurrentLocation(mMap);
+
+            }
+        }
     }
 }
