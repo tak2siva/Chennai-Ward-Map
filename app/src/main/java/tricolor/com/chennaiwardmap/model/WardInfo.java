@@ -17,6 +17,7 @@ public class WardInfo implements Serializable, Parcelable {
     public static final String COLUMN_ZONAL_OFFICE_EMAIL = "zonal_officer_email";
     public static final String COLUMN_ZONAL_OFFICE_LANDLINE = "zonal_office_landline";
     public static final String COLUMN_ZONAL_OFFICE_MOBILE = "zonal_officer_mobile";
+    public static final String COLUMN_WHATSAPP_GROUP_ADDRESS = "whatsapp_group_address";
     public static final String[] ALL_COLUMNS = new String[] {
             COLUMN_WARD_NO,
             COLUMN_ZONE_NO,
@@ -24,7 +25,8 @@ public class WardInfo implements Serializable, Parcelable {
             COLUMN_ZONAL_OFFICE_ADDRESS,
             COLUMN_ZONAL_OFFICE_EMAIL,
             COLUMN_ZONAL_OFFICE_LANDLINE,
-            COLUMN_ZONAL_OFFICE_MOBILE
+            COLUMN_ZONAL_OFFICE_MOBILE,
+            COLUMN_WHATSAPP_GROUP_ADDRESS
     };
 
     private int wardNo;
@@ -34,6 +36,7 @@ public class WardInfo implements Serializable, Parcelable {
     private String zonalOfficeEmail = "";
     private String zonalOfficeLandline = "";
     private String zonalOfficeMobile = "";
+    private String whatsappGroupAddress = "";
 
     public WardInfo(Cursor cursor) {
         this(cursor.getInt(0),
@@ -42,10 +45,11 @@ public class WardInfo implements Serializable, Parcelable {
                 cursor.getString(3),
                 cursor.getString(4),
                 cursor.getString(5),
-                cursor.getString(6));
+                cursor.getString(6),
+                cursor.getString(7));
     }
 
-    public WardInfo(int wardNo, String zoneNo, String zoneName, String zonalOfficeAddress, String zonalOfficeEmail, String zonalOfficeLandline, String zonalOfficeMobile) {
+    public WardInfo(int wardNo, String zoneNo, String zoneName, String zonalOfficeAddress, String zonalOfficeEmail, String zonalOfficeLandline, String zonalOfficeMobile, String whatsappGroupAddress) {
         this.wardNo = wardNo;
         this.zoneNo = zoneNo;
         this.zoneName = zoneName;
@@ -53,6 +57,7 @@ public class WardInfo implements Serializable, Parcelable {
         this.zonalOfficeEmail = zonalOfficeEmail;
         this.zonalOfficeLandline = zonalOfficeLandline;
         this.zonalOfficeMobile = zonalOfficeMobile;
+        this.whatsappGroupAddress = whatsappGroupAddress;
     }
 
     public WardInfo() {
@@ -93,6 +98,9 @@ public class WardInfo implements Serializable, Parcelable {
         return zonalOfficeLandline;
     }
 
+    public java.lang.String getWhatsappGroupAddress() {
+        return whatsappGroupAddress;
+    }
 
     @Override
     public int describeContents() {
@@ -108,6 +116,7 @@ public class WardInfo implements Serializable, Parcelable {
         dest.writeString(this.zonalOfficeEmail);
         dest.writeString(this.zonalOfficeLandline);
         dest.writeString(this.zonalOfficeMobile);
+        dest.writeString(this.whatsappGroupAddress);
     }
 
     protected WardInfo(Parcel in) {
@@ -118,6 +127,7 @@ public class WardInfo implements Serializable, Parcelable {
         this.zonalOfficeEmail = in.readString();
         this.zonalOfficeLandline = in.readString();
         this.zonalOfficeMobile = in.readString();
+        this.whatsappGroupAddress = in.readString();
     }
 
     public static final Parcelable.Creator<WardInfo> CREATOR = new Parcelable.Creator<WardInfo>() {
