@@ -44,7 +44,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public static final String SER_KEY = "tricolor.com.chennaiwardmap.SER_KEY";
 
     private GoogleMap mMap;
-    private static final int defaultZoom = 13;
+    private static final float defaultZoom = 12.5f;
     private static final LatLng chennai = new LatLng(13.0827, 80.2707);
     private static LatLng currentLocation = null;
     private List<Marker> markers = new ArrayList<>();
