@@ -4,7 +4,6 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -89,18 +88,27 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     private void moveAndCreateMarkerInCurrentLocation(GoogleMap googleMap) {
-        LocationManager manager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-        Criteria mCriteria = new Criteria();
-        String bestProvider = String.valueOf(manager.getBestProvider(mCriteria, true));
 
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) ==
                 PackageManager.PERMISSION_GRANTED &&
                 ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) ==
                         PackageManager.PERMISSION_GRANTED) {
-            Location mLocation = manager.getLastKnownLocation(bestProvider);
-            if (mLocation != null) {
-                LatLng currentLatLng = new LatLng(mLocation.getLatitude(),
-                        mLocation.getLongitude());
+            LocationManager manager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+            List<String> providers = manager.getAllProviders();
+            Location bestLocation = null;
+            for (String provider : providers) {
+                Location lastKnownLocation = manager.getLastKnownLocation(provider);
+                if (lastKnownLocation == null) {
+                    continue;
+                }
+                if (bestLocation == null || lastKnownLocation.getAccuracy() < bestLocation.getAccuracy()) {
+                    bestLocation = lastKnownLocation;
+                }
+
+            }
+            if (bestLocation != null) {
+                LatLng currentLatLng = new LatLng(bestLocation.getLatitude(),
+                        bestLocation.getLongitude());
                 CameraUpdate update = CameraUpdateFactory.newLatLngZoom(currentLatLng,
                         defaultZoom);
                 googleMap.moveCamera(update);
