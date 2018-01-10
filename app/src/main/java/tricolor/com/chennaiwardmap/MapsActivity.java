@@ -1,14 +1,19 @@
 package tricolor.com.chennaiwardmap;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
 
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -66,10 +71,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         setDefaultConfig();
-
         try {
             kmlLayer = new KmlLayer(mMap, R.raw.geo_chennai_wards, this);
             kmlLayer.addLayerToMap();
+            moveAndCreateMarkerInCurrentLocation(googleMap);
         } catch (XmlPullParserException | IOException e) {
             e.printStackTrace();
         }
@@ -77,18 +82,43 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
             @Override
             public void onMapLongClick(LatLng latLng) {
-                removeAllMarkers();
-                KmlPlacemark kmlPlacemark = KmlUtil.containsInAnyPolygon(kmlLayer, latLng);
-                currentLocation = latLng;
-                if (kmlPlacemark != null) {
-                    String zone_no = kmlPlacemark.getProperty(ZONE_NO);
-                    WardInfo wardInfo = wardInfoDao.getWardInfo(zone_no);
-                    Marker clickLocationMarker = mMap.addMarker(new MarkerOptions().position(latLng).title(wardInfo.getTitle()));
-                    markers.add(clickLocationMarker);
-                    updateSelectedWardInfo(wardInfo);
-                }
+                onLocationSelected(latLng);
             }
         });
+    }
+
+    private void moveAndCreateMarkerInCurrentLocation(GoogleMap googleMap) {
+        LocationManager manager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        Criteria mCriteria = new Criteria();
+        String bestProvider = String.valueOf(manager.getBestProvider(mCriteria, true));
+
+        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) ==
+                PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) ==
+                        PackageManager.PERMISSION_GRANTED) {
+            Location mLocation = manager.getLastKnownLocation(bestProvider);
+
+
+            LatLng currentLatLng = new LatLng(mLocation.getLatitude(),
+                    mLocation.getLongitude());
+            CameraUpdate update = CameraUpdateFactory.newLatLngZoom(currentLatLng,
+                    defaultZoom);
+            googleMap.moveCamera(update);
+            onLocationSelected(currentLatLng);
+        }
+    }
+
+    public void onLocationSelected(LatLng latLng) {
+        removeAllMarkers();
+        KmlPlacemark kmlPlacemark = KmlUtil.containsInAnyPolygon(kmlLayer, latLng);
+        currentLocation = latLng;
+        if (kmlPlacemark != null) {
+            String zone_no = kmlPlacemark.getProperty(ZONE_NO);
+            WardInfo wardInfo = wardInfoDao.getWardInfo(zone_no);
+            Marker clickLocationMarker = mMap.addMarker(new MarkerOptions().position(latLng).title(wardInfo.getTitle()));
+            markers.add(clickLocationMarker);
+            updateSelectedWardInfo(wardInfo);
+        }
     }
 
     private void setDefaultConfig() {
@@ -103,9 +133,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             mMap.getUiSettings().setMyLocationButtonEnabled(true);
         } else {
             // reload activity
-            ActivityCompat.requestPermissions(this, new String[] {
-                            Manifest.permission.ACCESS_FINE_LOCATION,
-                            Manifest.permission.ACCESS_COARSE_LOCATION }, 1);
+            ActivityCompat.requestPermissions(this, new String[]{
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
         }
     }
 
@@ -116,15 +146,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         markers.clear();
     }
 
-    public void showWardDetails (View view)
-    {
+    public void showWardDetails(View view) {
         Intent intent = new Intent(this, ResultViewActivity.class);
-        String wardName = currentWardInfo.getTitle();
-        Object wardObject = currentWardInfo;
-        Object mapObject = mMap;
         Bundle bundle = new Bundle();
         bundle.putParcelable(SER_KEY, currentWardInfo);
-        bundle.putParcelable("latLong",currentLocation);
+        bundle.putParcelable("latLong", currentLocation);
 
         intent.putExtras(bundle);
         startActivity(intent);
