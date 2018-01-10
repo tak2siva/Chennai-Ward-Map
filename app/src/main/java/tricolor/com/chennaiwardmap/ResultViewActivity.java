@@ -62,6 +62,9 @@ public class ResultViewActivity extends AppCompatActivity implements OnMapReadyC
             Toast.makeText(this, "Unable to retrieve the ward location now", Toast.LENGTH_SHORT).show();
         }
         else {
+            SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                    .findFragmentById(R.id.map);
+            mapFragment.getMapAsync(this);
             WardInfo wardInfo = (WardInfo)wardObj;
             populateUI(wardInfo);
         }

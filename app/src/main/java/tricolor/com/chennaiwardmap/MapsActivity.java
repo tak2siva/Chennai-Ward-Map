@@ -120,12 +120,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     {
         Intent intent = new Intent(this, ResultViewActivity.class);
         String wardName = currentWardInfo.getTitle();
-
         Object wardObject = currentWardInfo;
         Object mapObject = mMap;
         Bundle bundle = new Bundle();
         bundle.putParcelable(SER_KEY, currentWardInfo);
-        bundle.putParcelable("latLang",currentLocation);
+        bundle.putParcelable("latLong",currentLocation);
 
         intent.putExtras(bundle);
         startActivity(intent);
