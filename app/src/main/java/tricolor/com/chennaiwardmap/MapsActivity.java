@@ -98,13 +98,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) ==
                         PackageManager.PERMISSION_GRANTED) {
             Location mLocation = manager.getLastKnownLocation(bestProvider);
-
-            LatLng currentLatLng = new LatLng(mLocation.getLatitude(),
-                    mLocation.getLongitude());
-            CameraUpdate update = CameraUpdateFactory.newLatLngZoom(currentLatLng,
-                    defaultZoom);
-            googleMap.moveCamera(update);
-            onLocationSelected(currentLatLng);
+            if (mLocation != null) {
+                LatLng currentLatLng = new LatLng(mLocation.getLatitude(),
+                        mLocation.getLongitude());
+                CameraUpdate update = CameraUpdateFactory.newLatLngZoom(currentLatLng,
+                        defaultZoom);
+                googleMap.moveCamera(update);
+                onLocationSelected(currentLatLng);
+            }
         }
     }
 
@@ -158,7 +159,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if(requestCode == 1) {
+        if (requestCode == 1) {
             if (grantResults.length > 0
                     && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
