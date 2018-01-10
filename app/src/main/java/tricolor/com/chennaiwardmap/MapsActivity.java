@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -37,7 +38,7 @@ import tricolor.com.chennaiwardmap.util.KmlUtil;
 
 import static tricolor.com.chennaiwardmap.model.KmlAttribute.ZONE_NO;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, LocationListener {
 
     public static final String WARD_NAME_MESSAGE = "tricolor.com.chennaiwardmap.WARD_NAME_MESSAGE";
     public static final String SER_KEY = "tricolor.com.chennaiwardmap.SER_KEY";
@@ -50,6 +51,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private KmlLayer kmlLayer;
     private WardInfoDao wardInfoDao;
     private WardInfo currentWardInfo;
+    private LocationManager manager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,7 +76,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         try {
             kmlLayer = new KmlLayer(mMap, R.raw.geo_chennai_wards, this);
             kmlLayer.addLayerToMap();
-            moveAndCreateMarkerInCurrentLocation(googleMap);
+            moveAndCreateMarkerInCurrentLocation();
         } catch (XmlPullParserException | IOException e) {
             e.printStackTrace();
         }
@@ -87,13 +89,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         });
     }
 
-    private void moveAndCreateMarkerInCurrentLocation(GoogleMap googleMap) {
+    private void moveAndCreateMarkerInCurrentLocation() {
 
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) ==
                 PackageManager.PERMISSION_GRANTED &&
                 ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) ==
                         PackageManager.PERMISSION_GRANTED) {
-            LocationManager manager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+            manager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
             List<String> providers = manager.getAllProviders();
             Location bestLocation = null;
             for (String provider : providers) {
@@ -107,17 +109,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
             }
             if (bestLocation != null) {
-                LatLng currentLatLng = new LatLng(bestLocation.getLatitude(),
-                        bestLocation.getLongitude());
-                CameraUpdate update = CameraUpdateFactory.newLatLngZoom(currentLatLng,
-                        defaultZoom);
-                googleMap.moveCamera(update);
-                onLocationSelected(currentLatLng);
+                onLocationSelected(new LatLng(bestLocation.getLatitude(),
+                        bestLocation.getLongitude()));
+                manager.removeUpdates(this);
+            } else {
+                manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
             }
         }
     }
 
     public void onLocationSelected(LatLng latLng) {
+        CameraUpdate update = CameraUpdateFactory.newLatLngZoom(latLng,
+                defaultZoom);
+        mMap.moveCamera(update);
         removeAllMarkers();
         KmlPlacemark kmlPlacemark = KmlUtil.containsInAnyPolygon(kmlLayer, latLng);
         currentLocation = latLng;
@@ -170,10 +174,30 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         if (requestCode == 1) {
             if (grantResults.length > 0
                     && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
-                moveAndCreateMarkerInCurrentLocation(mMap);
-
+                moveAndCreateMarkerInCurrentLocation();
             }
         }
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        onLocationSelected(new LatLng(location.getLatitude(),
+                location.getLongitude()));
+        manager.removeUpdates(this);
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+
+    }
+
+    @Override
+    public void onProviderEnabled(String provider) {
+        moveAndCreateMarkerInCurrentLocation();
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
+
     }
 }
