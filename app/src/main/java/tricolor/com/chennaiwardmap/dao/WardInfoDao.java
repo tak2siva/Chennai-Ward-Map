@@ -12,15 +12,15 @@ public class WardInfoDao {
         this.handle = handle;
     }
 
-    public WardInfo getWardInfo(String zone_no) {
+    public WardInfo getWardInfo(String ward_no) {
         Cursor cursor;
         WardInfo wardInfo = new WardInfo();
         try {
             handle.open();
             cursor = handle.getDatabase().query(WardInfo.TABLE_NAME,
                     WardInfo.ALL_COLUMNS,
-                    WardInfo.COLUMN_ZONE_NO + " = ?",
-                    new String[] { zone_no },
+                    WardInfo.COLUMN_WARD_NO + " = ?",
+                    new String[] { ward_no },
                     null, null, null, null);
 
             if (cursor != null) {

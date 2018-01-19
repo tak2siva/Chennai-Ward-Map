@@ -126,8 +126,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         KmlPlacemark kmlPlacemark = KmlUtil.containsInAnyPolygon(kmlLayer, latLng);
         currentLocation = latLng;
         if (kmlPlacemark != null) {
-            String zone_no = kmlPlacemark.getProperty(ZONE_NO);
-            WardInfo wardInfo = wardInfoDao.getWardInfo(zone_no);
+            String wardName = kmlPlacemark.getProperty("name");
+            WardInfo wardInfo = wardInfoDao.getWardInfo(wardName.split(" ")[1]);
             Marker clickLocationMarker = mMap.addMarker(new MarkerOptions().position(latLng).title(wardInfo.getTitle()));
             markers.add(clickLocationMarker);
             updateSelectedWardInfo(wardInfo);
